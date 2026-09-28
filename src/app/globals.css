@@ -4603,6 +4603,23 @@ html[data-theme="dark"] .auth-card {
 .gallery-thumbnails img {
   object-fit: contain;
 }
+.gallery-thumbnails .gallery-video-thumbnail {
+  object-fit: cover;
+}
+.gallery-video-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.gallery-video-badge-overlay {
+  position: absolute;
+  inset: 0;
+  color: #fff;
+  background: #0004;
+  text-shadow: 0 1px 3px #000;
+}
 .gallery-error {
   display: flex;
   height: 100%;

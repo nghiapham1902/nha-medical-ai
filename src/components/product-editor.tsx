@@ -13,6 +13,18 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { Category, ProductInput } from "@/lib/catalog";
+import { ProductImagePreview } from "./product-image-preview";
+import { videoSource } from "@/lib/video-source";
+
+function videoPreviewImage(src: string, poster?: string) {
+  if (poster?.trim()) return poster;
+  const video = videoSource(src);
+  if (video?.kind !== "embed") return "";
+  const url = new URL(video.src);
+  return url.hostname === "www.youtube.com"
+    ? `https://i.ytimg.com/vi/${url.pathname.split("/").pop()}/hqdefault.jpg`
+    : "";
+}
 function SectionTitle({
   icon: Icon,
   title,
@@ -280,6 +292,10 @@ export function ProductEditor({
               liên kết YouTube/Vimeo để xem trực tiếp trong trang chi tiết.
             </p>
             {field("image", "URL ảnh chính", false, false, 2048)}
+            <ProductImagePreview
+              src={product.image}
+              label="Xem trước ảnh chính"
+            />
             {product.media.map((item, i) => (
               <div className="admin-repeat" key={i}>
                 <strong>
@@ -340,6 +356,23 @@ export function ProductEditor({
                     />
                   </label>
                 )}
+                <ProductImagePreview
+                  src={
+                    item.type === "image"
+                      ? item.src
+                      : videoPreviewImage(item.src, item.poster)
+                  }
+                  label={
+                    item.type === "image"
+                      ? `Xem trước ảnh ${i + 1}`
+                      : `Ảnh đại diện video ${i + 1}`
+                  }
+                  emptyText={
+                    item.type === "video"
+                      ? "Nhập URL ảnh poster hoặc liên kết YouTube để xem trước"
+                      : undefined
+                  }
+                />
                 <button
                   type="button"
                   className="button secondary"
@@ -504,9 +537,14 @@ export function ProductEditor({
           </section>
           <section className="product-form-card product-summary">
             <span className="product-summary-label">TÓM TẮT SẢN PHẨM</span>
-            <div className="product-summary-icon">
-              <Package size={30} aria-hidden="true" />
-            </div>
+            <ProductImagePreview
+              src={
+                product.image ||
+                product.media.find((item) => item.type === "image")?.src
+              }
+              label="Ảnh sản phẩm"
+              emptyText="Chưa có ảnh sản phẩm"
+            />
             <h3>{product.name.trim() || "Tên sản phẩm"}</h3>
             <p>
               {categories.find((c) => c.id === product.category_id)?.name ||

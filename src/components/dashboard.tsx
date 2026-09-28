@@ -1,7 +1,17 @@
 ﻿"use client";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Package, Tags, Plus, Pencil, Trash2, LogOut } from "lucide-react";
+import {
+  Package,
+  Tags,
+  Plus,
+  Pencil,
+  Trash2,
+  LogOut,
+  ChevronRight,
+  ArrowUpRight,
+  Layers3,
+} from "lucide-react";
 import { Logo } from "./store";
 import {
   type Category,
@@ -127,9 +137,11 @@ export function Dashboard() {
   return (
     <div className="dashboard-shell catalog-admin">
       <aside className="dashboard-sidebar">
-        <Logo />
-        <span className="sidebar-label">QUẢN TRỊ CATALOGUE</span>
-        <nav>
+        <div className="catalog-sidebar-brand">
+          <Logo />
+        </div>
+        <span className="sidebar-label">QUẢN LÝ NỘI DUNG</span>
+        <nav aria-label="Điều hướng quản trị">
           {(
             [
               ["products", "Sản phẩm", Package],
@@ -140,6 +152,7 @@ export function Dashboard() {
               key={key}
               disabled={busy || saving || loading}
               className={tab === key ? "selected" : ""}
+              aria-current={tab === key ? "page" : undefined}
               onClick={() => {
                 setTab(key);
                 setEditing(null);
@@ -149,14 +162,42 @@ export function Dashboard() {
                 setStatus("");
               }}
             >
-              <Icon size={19} />
-              {label}
+              <span className="catalog-nav-icon">
+                <Icon size={20} aria-hidden="true" />
+              </span>
+              <span className="catalog-nav-text">
+                <strong>{label}</strong>
+                <span>
+                  {key === "products"
+                    ? "Nội dung & hình ảnh"
+                    : "Phân nhóm sản phẩm"}
+                </span>
+              </span>
+              <ChevronRight
+                className="catalog-nav-arrow"
+                size={15}
+                aria-hidden="true"
+              />
             </button>
           ))}
         </nav>
         <div className="sidebar-bottom">
-          <p>Dữ liệu lưu tại Supabase.</p>
-          <Link href="/">← Về website</Link>
+          <div className="catalog-sidebar-summary">
+            <span className="catalog-summary-icon">
+              <Layers3 size={20} aria-hidden="true" />
+            </span>
+            <strong>Catalogue của bạn</strong>
+            <p>
+              {ready
+                ? `${products.length} sản phẩm · ${categories.length} danh mục`
+                : loading
+                  ? "Đang tải nội dung…"
+                  : "Chưa tải được nội dung"}
+            </p>
+          </div>
+          <Link href="/">
+            Về website <ArrowUpRight size={17} aria-hidden="true" />
+          </Link>
         </div>
       </aside>
       <main className="dashboard-body">
@@ -297,8 +338,8 @@ export function Dashboard() {
                           <td>
                             {"sku" in row ? (
                               <>
-                                {row.sku}
-                                <small>
+                                <span className="admin-sku">{row.sku}</span>
+                                <small className="admin-category-label">
                                   {
                                     categories.find(
                                       (c) => c.id === row.category_id,
@@ -307,34 +348,44 @@ export function Dashboard() {
                                 </small>
                               </>
                             ) : (
-                              row.sort_order
+                              <span className="admin-order-label">
+                                {row.sort_order}
+                              </span>
                             )}
                           </td>
                           <td>
                             {"active" in row ? (
-                              row.active ? (
-                                "Hiển thị"
-                              ) : (
-                                "Ẩn"
-                              )
+                              <span
+                                className={`admin-status-badge ${row.active ? "is-published" : "is-hidden"}`}
+                              >
+                                {row.active ? "Hiển thị" : "Ẩn"}
+                              </span>
                             ) : (
                               <>
-                                {row.status === "published"
-                                  ? "Đã xuất bản"
-                                  : "Nháp"}
+                                <span
+                                  className={`admin-status-badge ${row.status === "published" ? "is-published" : "is-draft"}`}
+                                >
+                                  {row.status === "published"
+                                    ? "Đã xuất bản"
+                                    : "Nháp"}
+                                </span>
                                 {!categories.find(
                                   (c) => c.id === row.category_id,
-                                )?.active && <small>Danh mục đang ẩn</small>}
+                                )?.active && (
+                                  <small className="admin-category-warning">
+                                    Danh mục đang ẩn
+                                  </small>
+                                )}
                               </>
                             )}
                           </td>
-                          <td>
+                          <td className="admin-updated-at">
                             {new Date(row.updated_at).toLocaleString("vi-VN")}
                           </td>
                           <td>
                             <div className="admin-row-actions">
                               <button
-                                className="icon-button"
+                                className="icon-button admin-action-edit"
                                 disabled={busy || loading}
                                 aria-label={`Sửa ${row.name}`}
                                 onClick={() => {
@@ -347,7 +398,7 @@ export function Dashboard() {
                                 <Pencil size={18} />
                               </button>
                               <button
-                                className="icon-button"
+                                className="icon-button admin-action-delete"
                                 disabled={busy || loading}
                                 aria-label={`Xóa ${row.name}`}
                                 onClick={() => {

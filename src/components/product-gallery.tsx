@@ -15,6 +15,50 @@ import type { ProductMedia } from "@/lib/data";
 
 import { videoSource } from "@/lib/video-source";
 
+function VideoThumbnail({
+  item,
+  fallback,
+}: {
+  item: Extract<ProductMedia, { type: "video" }>;
+  fallback?: string;
+}) {
+  const video = videoSource(item.src);
+  const embed = video?.kind === "embed" ? new URL(video.src) : null;
+  const youtubeImage =
+    embed?.hostname === "www.youtube.com"
+      ? `https://i.ytimg.com/vi/${embed.pathname.split("/").pop()}/hqdefault.jpg`
+      : undefined;
+  const candidates = [...new Set([item.poster, youtubeImage, fallback])].filter(
+    (src): src is string => Boolean(src),
+  );
+  const [failedSources, setFailedSources] = useState<string[]>([]);
+  const thumbnail = candidates.find((src) => !failedSources.includes(src));
+
+  return (
+    <>
+      {thumbnail && (
+        <Image
+          key={thumbnail}
+          src={thumbnail}
+          alt=""
+          fill
+          unoptimized
+          sizes="88px"
+          className="gallery-video-thumbnail"
+          onError={() => setFailedSources((sources) => [...sources, thumbnail])}
+        />
+      )}
+      <span
+        className={`gallery-video-badge${thumbnail ? " gallery-video-badge-overlay" : ""}`}
+        aria-hidden="true"
+      >
+        <Play size={24} />
+        <span>Video</span>
+      </span>
+    </>
+  );
+}
+
 export function ProductGallery({
   name,
   image,
@@ -31,6 +75,7 @@ export function ProductGallery({
       : [];
   const [index, setIndex] = useState(0);
   const [failed, setFailed] = useState(false);
+  const fallbackImage = image || items.find((item) => item.type === "image")?.src;
   const dialog = useRef<HTMLDialogElement>(null);
   const current = items[index] ?? items[0];
   const select = (next: number) => {
@@ -193,10 +238,7 @@ export function ProductGallery({
               {item.type === "image" ? (
                 <Image src={item.src} alt="" fill unoptimized sizes="88px" />
               ) : (
-                <>
-                  <Play size={24} />
-                  <span>Video</span>
-                </>
+                <VideoThumbnail item={item} fallback={fallbackImage} />
               )}
             </button>
           ))}
