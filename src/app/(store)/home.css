@@ -1,0 +1,178 @@
+﻿.home-page .section {
+  padding-block: 64px;
+}
+.home-page .section-heading {
+  align-items: end;
+  margin-bottom: 28px;
+}
+.home-page .section-heading p {
+  max-width: 640px;
+}
+.home-page .section-heading > .text-link {
+  flex-shrink: 0;
+}
+.home-page #giai-phap {
+  padding-bottom: 40px;
+}
+.home-page .category-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.home-page .category-card {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 4px 18px;
+  text-align: left;
+  padding: 24px;
+  border-radius: 12px;
+}
+.home-page .category-card > span {
+  grid-row: span 2;
+  width: 56px;
+  height: 56px;
+  margin: 0;
+}
+.home-page .category-card h3 {
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  font-size: 16px;
+  align-self: end;
+}
+.home-page .category-card small {
+  justify-content: start;
+  align-self: start;
+  margin: 0;
+}
+.home-page .supplied-brands {
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.home-page .supplied-brand-logo {
+  height: 110px;
+}
+.home-page .supplied-brand-note {
+  margin-bottom: 0;
+}
+.home-page .landing-split {
+  gap: clamp(32px, 5vw, 72px);
+}
+.home-page .landing-benefit-list {
+  gap: 24px;
+}
+.home-page .landing-benefit-list p {
+  margin-bottom: 0;
+}
+.home-page .landing-section-title {
+  text-align: left;
+  margin-bottom: 28px;
+}
+.home-page .landing-steps article {
+  padding: 28px;
+}
+.home-page .landing-steps article > span {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+.home-page .landing-steps p {
+  margin-bottom: 0;
+}
+.home-maintenance {
+  background: var(--bg);
+  border-block: 1px solid var(--line);
+}
+.home-maintenance-inner {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: center;
+  padding-block: 32px;
+}
+.home-maintenance h2 {
+  font-size: 24px;
+}
+.home-maintenance p {
+  max-width: 720px;
+  margin-bottom: 0;
+  font-size: 14px;
+}
+.home-maintenance .text-link {
+  white-space: nowrap;
+}
+.home-page .landing-faq {
+  border-top: 0;
+}
+.home-page .landing-faq details:first-child {
+  padding-top: 0;
+}
+.home-page .landing-contact-copy {
+  padding-top: 0;
+}
+@media (max-width: 1000px) {
+  .home-page .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .home-maintenance-inner {
+    grid-template-columns: 54px minmax(0, 1fr);
+  }
+  .home-maintenance .text-link {
+    grid-column: 2;
+  }
+}
+@media (max-width: 760px) {
+  .home-page .section {
+    padding-block: 40px;
+  }
+  .home-page .section-heading {
+    flex-direction: column;
+    align-items: start;
+    gap: 16px;
+  }
+  .home-page .medical-banner-actions {
+    gap: 18px;
+  }
+  .home-page #giai-phap {
+    padding-bottom: 32px;
+  }
+  .home-page .supplied-brands {
+    padding-top: 32px;
+  }
+  .home-page .category-card {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 18px;
+  }
+  .home-page .category-card > span {
+    grid-row: auto;
+    width: 44px;
+    height: 44px;
+  }
+  .home-page .category-card h3 {
+    font-size: 14px;
+    align-self: start;
+  }
+  .home-page .category-card small {
+    font-size: 11px;
+  }
+  .home-page .landing-split,
+  .home-page .landing-faq {
+    gap: 28px;
+  }
+  .home-page .landing-steps {
+    gap: 14px;
+  }
+  .home-page .landing-steps article {
+    padding: 22px;
+  }
+  .home-maintenance-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .home-maintenance .text-link {
+    grid-column: auto;
+    white-space: normal;
+  }
+  .home-maintenance h2 {
+    font-size: 22px;
+  }
+}
