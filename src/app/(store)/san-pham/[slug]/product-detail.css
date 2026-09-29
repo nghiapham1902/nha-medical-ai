@@ -181,6 +181,12 @@
 .pdp-specs th,
 .pdp-specs td {
   text-align: left;
+  vertical-align: middle;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: normal;
   padding: 16px;
   border-bottom: 1px solid var(--line);
   overflow-wrap: anywhere;
@@ -188,7 +194,13 @@
   color: var(--ink);
 }
 .pdp-specs th {
-  width: 42%;
+  width: 50%;
+  font-weight: 500;
+}
+.pdp-specs .spec-group {
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 4px;
 }
 .pdp-documents {
   display: grid;

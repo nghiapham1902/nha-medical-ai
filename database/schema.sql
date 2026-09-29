@@ -64,7 +64,7 @@ create table public.categories (
  name text not null check(length(btrim(name)) between 1 and 200),
  slug text unique not null check(length(slug) <= 160 and slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
  description text not null default '' check(length(description) <= 1000),
- icon text not null default 'Package' check(icon in ('Microscope','Package','HeartPulse','TestTubes','FlaskConical','ShieldCheck')),
+ icon text not null default 'Package' check(icon in ('Microscope','Package','HeartPulse','TestTubes','FlaskConical','ShieldCheck','Scissors','Activity','Scan','Baby','ShieldPlus','Dna','Stethoscope','Syringe','Droplets')),
  sort_order integer not null default 0 check(sort_order between 0 and 99999),
  active boolean not null default false,
  created_at timestamptz not null default now(), updated_at timestamptz not null default now()

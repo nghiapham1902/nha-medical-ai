@@ -1,6 +1,7 @@
 ﻿import { test, expect } from "@playwright/test";
 import { PGlite } from "@electric-sql/pglite";
 import { readFile } from "node:fs/promises";
+import { iconNames } from "../src/lib/catalog";
 
 // PostgreSQL in memory, no Supabase credentials/network/data writes.
 // Only Supabase's auth.uid()/roles are emulated; the actual migration runs unchanged.
@@ -15,6 +16,13 @@ test('SQL migration, CRUD constraints, timestamps and RLS on ephemeral PostgreSQ
   await db.exec(`create role anon; create role authenticated; create schema auth; create table auth.users(id uuid primary key); create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$; grant usage on schema auth to anon,authenticated; grant execute on function auth.uid() to anon,authenticated;`);
   await db.query('insert into auth.users(id) values($1),($2)',[admin,member]);
   await db.exec(await readFile('database/migrations/001_catalog.sql','utf8'));
+  await db.exec(await readFile('database/migrations/002_category_icons.sql','utf8'));
+  await db.exec(await readFile('database/migrations/002_category_icons.sql','utf8'));
+  for (const icon of iconNames) {
+    await db.query("insert into public.categories(name,slug,icon) values($1,$2,$3)", [icon, `icon-${icon.toLowerCase()}`, icon]);
+  }
+  await expect(db.query("insert into public.categories(name,slug,icon) values('Invalid','invalid-icon','Unknown')")).rejects.toThrow();
+  await db.exec("delete from public.categories where slug like 'icon-%'");
   const seed=await readFile('database/seed.sql','utf8'); await db.exec(seed); await db.exec(seed);
   expect((await db.query('select * from public.categories')).rows).toHaveLength(6);
   expect((await db.query('select * from public.products')).rows).toHaveLength(0);

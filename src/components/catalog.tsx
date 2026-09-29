@@ -5,6 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { ImageOff, Search, ArrowRight } from "lucide-react";
 import type { Category, CatalogProduct } from "@/lib/catalog";
+function brandLabel(value: string) {
+  return value.normalize("NFC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim().replace(/\s+/g, " ");
+}
+function brandKey(value: string) {
+  return brandLabel(value).toLocaleLowerCase("vi");
+}
 export function Catalog({
   products,
   categories,
@@ -22,13 +28,21 @@ export function Catalog({
   const [sort, setSort] = useState("new");
   const [page, setPage] = useState(1);
   const brands = useMemo(
-    () => [...new Set(products.map((p) => p.brand).filter(Boolean))].sort(),
+    () => {
+      const unique = new Map<string, string>();
+      for (const product of products) {
+        const label = brandLabel(product.brand);
+        const key = brandKey(label);
+        if (key && !unique.has(key)) unique.set(key, label);
+      }
+      return [...unique.entries()].sort((a, b) => a[1].localeCompare(b[1], "vi"));
+    },
     [products],
   );
   const filtered = products
     .filter(
       (p) =>
-        (!brand || p.brand === brand) &&
+        (!brand || brandKey(p.brand) === brand) &&
         `${p.name} ${p.sku} ${p.model}`
           .toLocaleLowerCase("vi")
           .includes(query.toLocaleLowerCase("vi")),
@@ -75,8 +89,8 @@ export function Catalog({
               }}
             >
               <option value="">Tất cả thương hiệu</option>
-              {brands.map((b) => (
-                <option key={b}>{b}</option>
+              {brands.map(([key, label]) => (
+                <option key={key} value={key}>{label}</option>
               ))}
             </select>
           </label>
@@ -159,7 +173,7 @@ function ProductCard({ product: p }: { product: CatalogProduct }) {
   const [failed, setFailed] = useState(false);
   const image = p.image || p.media?.find((m) => m.type === "image")?.src;
   return (
-    <article className="product-card">
+    <article className="product-card catalog-product-card">
       <Link href={`/san-pham/${p.slug}`} className="product-image">
         {image && !failed ? (
           <Image
@@ -179,14 +193,14 @@ function ProductCard({ product: p }: { product: CatalogProduct }) {
         )}
       </Link>
       <div className="product-info">
-        <span className="product-category">{p.category}</span>
+        <span className="product-category" title={p.category}>{p.category}</span>
         <Link href={`/san-pham/${p.slug}`}>
-          <h3>{p.name}</h3>
+          <h3 title={p.name}>{p.name}</h3>
         </Link>
-        <p className="product-code">
-          SKU: {p.sku}
-          {p.model ? ` · ${p.model}` : ""}
-        </p>
+        <div className="product-code">
+          <div><span>SKU</span><span title={p.sku}>{p.sku}</span></div>
+          {p.model && <div><span>Model</span><span title={p.model}>{p.model}</span></div>}
+        </div>
         <div className="product-price">
           <Link
             className="button primary product-quote"

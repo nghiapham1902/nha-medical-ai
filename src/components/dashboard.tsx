@@ -1,6 +1,7 @@
 ﻿"use client";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Package,
   Tags,
@@ -11,6 +12,7 @@ import {
   ChevronRight,
   ArrowUpRight,
   Layers3,
+  ImageOff,
 } from "lucide-react";
 import { Logo } from "./store";
 import {
@@ -23,6 +25,7 @@ import "./catalog-admin.css";
 import { AdminNotice } from "./admin-notice";
 import { ProductEditor } from "./product-editor";
 import { CategoryEditor, CategoryIcon } from "./category-editor";
+import { validateUrl } from "@/lib/catalog-validation";
 
 type Resource = "categories" | "products";
 type Entry = Category | ProductRecord;
@@ -202,9 +205,19 @@ export function Dashboard() {
       </aside>
       <main className="dashboard-body">
         <header className="dashboard-header">
-          <strong>Quản trị nội dung</strong>
+          <div className="catalog-header-title">
+            <span className="catalog-header-mark">
+              <Layers3 size={19} strokeWidth={1.7} aria-hidden="true" />
+            </span>
+            <strong>Quản trị nội dung</strong>
+            <span className="catalog-header-section">
+              <ChevronRight size={14} aria-hidden="true" />
+              {tab === "categories" ? "Danh mục" : "Sản phẩm"}
+            </span>
+          </div>
           <button
-            className="button secondary"
+            type="button"
+            className="catalog-header-logout"
             disabled={busy || saving}
             onClick={async () => {
               try {
@@ -216,7 +229,7 @@ export function Dashboard() {
               }
             }}
           >
-            <LogOut size={17} />
+            <LogOut size={16} strokeWidth={1.7} aria-hidden="true" />
             Đăng xuất
           </button>
         </header>
@@ -325,15 +338,41 @@ export function Dashboard() {
                       {rows.map((row) => (
                         <tr key={row.id}>
                           <td>
-                            <strong className="admin-entry-name">
-                              {"icon" in row && (
-                                <span className="admin-category-icon">
-                                  <CategoryIcon name={row.icon} size={20} />
-                                </span>
+                            <div
+                              className={
+                                "sku" in row ? "admin-product-entry" : undefined
+                              }
+                            >
+                              {"sku" in row && (
+                                <ProductThumbnail
+                                  key={
+                                    row.image ||
+                                    row.media.find(
+                                      (item) => item.type === "image",
+                                    )?.src ||
+                                    ""
+                                  }
+                                  src={
+                                    row.image ||
+                                    row.media.find(
+                                      (item) => item.type === "image",
+                                    )?.src
+                                  }
+                                  name={row.name}
+                                />
                               )}
-                              {row.name}
-                            </strong>
-                            <small>{row.slug}</small>
+                              <div className="admin-entry-text">
+                                <strong className="admin-entry-name">
+                                  {"icon" in row && (
+                                    <span className="admin-category-icon">
+                                      <CategoryIcon name={row.icon} size={20} />
+                                    </span>
+                                  )}
+                                  {row.name}
+                                </strong>
+                                <small>{row.slug}</small>
+                              </div>
+                            </div>
                           </td>
                           <td>
                             {"sku" in row ? (
@@ -451,6 +490,37 @@ export function Dashboard() {
     </div>
   );
 }
+function ProductThumbnail({ src, name }: { src?: string; name: string }) {
+  const [failed, setFailed] = useState(false);
+  let source = "";
+  try {
+    source = validateUrl(src || "");
+  } catch {
+    // Invalid image URLs use the same placeholder as missing images.
+  }
+  return (
+    <span className="admin-product-thumbnail">
+      {source && !failed ? (
+        <Image
+          src={source}
+          alt={name}
+          width={64}
+          height={64}
+          unoptimized
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <span
+          role="img"
+          aria-label={failed ? "Không tải được ảnh" : "Chưa có ảnh"}
+        >
+          <ImageOff size={24} aria-hidden="true" />
+        </span>
+      )}
+    </span>
+  );
+}
+
 function Editor({
   resource,
   entry,

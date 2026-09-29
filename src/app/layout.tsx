@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
+import "./article.css";
 import { siteUrl } from "@/lib/seo";
 import { ThemeProvider } from "@/components/theme";
-const poppins = Poppins({
-  subsets: ["latin", "latin-ext"],
+const siteFont = Be_Vietnam_Pro({
+  subsets: ["latin", "latin-ext", "vietnamese"],
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
-  variable: "--font-poppins",
+  variable: "--font-site",
 });
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -31,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" className={poppins.variable} suppressHydrationWarning>
+    <html lang="vi" className={siteFont.variable} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{

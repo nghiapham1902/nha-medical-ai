@@ -55,7 +55,7 @@ export default function Page() {
             <Clock />
             <div>
               <strong>Giờ làm việc</strong>
-              <p>Sẽ công bố khi vận hành chính thức</p>
+              <p>8h - 17h (Từ thứ 2 - 7)</p>
             </div>
           </div>
           <div className="map-placeholder">

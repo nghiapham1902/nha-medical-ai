@@ -1,42 +1,7 @@
-import {
-  Microscope,
-  Package,
-  HeartPulse,
-  TestTubes,
-  FlaskConical,
-  ShieldCheck,
-  Check,
-  ChevronRight,
-} from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
 import { iconNames, type CategoryInput } from "@/lib/catalog";
-
-const icons = {
-  Microscope,
-  Package,
-  HeartPulse,
-  TestTubes,
-  FlaskConical,
-  ShieldCheck,
-};
-const labels = {
-  Microscope: "Kính hiển vi",
-  Package: "Vật tư y tế",
-  HeartPulse: "Chăm sóc sức khỏe",
-  TestTubes: "Xét nghiệm",
-  FlaskConical: "Phòng thí nghiệm",
-  ShieldCheck: "Bảo hộ y tế",
-};
-
-export function CategoryIcon({
-  name,
-  size = 24,
-}: {
-  name: CategoryInput["icon"];
-  size?: number;
-}) {
-  const Icon = icons[name] || Package;
-  return <Icon size={size} strokeWidth={1.7} aria-hidden="true" />;
-}
+import { CategoryIcon, categoryIconLabels as labels } from "./category-icons";
+export { CategoryIcon } from "./category-icons";
 
 export function CategoryEditor({
   category,

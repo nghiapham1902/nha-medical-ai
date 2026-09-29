@@ -6,6 +6,15 @@ export const iconNames = [
   "TestTubes",
   "FlaskConical",
   "ShieldCheck",
+  "Scissors",
+  "Activity",
+  "Scan",
+  "Baby",
+  "ShieldPlus",
+  "Dna",
+  "Stethoscope",
+  "Syringe",
+  "Droplets",
 ] as const;
 export type CategoryInput = {
   name: string;

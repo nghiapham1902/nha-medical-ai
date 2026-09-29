@@ -1,5 +1,7 @@
 import { adminSession } from "@/lib/supabase/server";
 import { supabaseConfig } from "@/lib/supabase/config";
+import { revalidateTag } from "next/cache";
+import { sanitizeIntroduction } from "@/lib/article-html";
 import {
   validateCategory,
   validateProduct,
@@ -41,7 +43,9 @@ async function handle(request: Request, context: Context) {
         .order(resource === "categories" ? "sort_order" : "updated_at", {
           ascending: resource === "categories",
         });
-      return error ? databaseFailure(error.code) : reply({ data, project: supabaseConfig()?.url });
+      return error
+        ? databaseFailure(error.code)
+        : reply({ data, project: supabaseConfig()?.url });
     }
     const body = await readBody(request);
     const id = request.method === "POST" ? undefined : validateId(body.id);
@@ -55,6 +59,7 @@ async function handle(request: Request, context: Context) {
         .eq("updated_at", version!)
         .select("id");
       if (error) return databaseFailure(error.code);
+      if (data?.length) revalidateTag("public-catalog");
       return data?.length
         ? reply({ message: "Đã xóa." })
         : reply(
@@ -70,6 +75,7 @@ async function handle(request: Request, context: Context) {
         ? validateCategory(body)
         : validateProduct(body)),
     };
+    if (resource === "products") values.introduction = sanitizeIntroduction(values.introduction as string);
     const query =
       request.method === "POST"
         ? client.from(resource).insert(values)
@@ -85,6 +91,7 @@ async function handle(request: Request, context: Context) {
         { error: "Bản ghi đã thay đổi. Hãy tải lại để tránh ghi đè dữ liệu." },
         409,
       );
+    revalidateTag("public-catalog");
     return reply(
       { data, message: "Đã lưu thành công." },
       request.method === "POST" ? 201 : 200,

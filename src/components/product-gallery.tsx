@@ -52,8 +52,15 @@ function VideoThumbnail({
         className={`gallery-video-badge${thumbnail ? " gallery-video-badge-overlay" : ""}`}
         aria-hidden="true"
       >
-        <Play size={24} />
-        <span>Video</span>
+        {youtubeImage ? (
+          <svg width="32" height="24" viewBox="0 0 32 24" aria-hidden="true">
+            <rect x="1" y="2" width="30" height="20" rx="6" fill="#ff0000" />
+            <path d="M13 7.5 21 12l-8 4.5Z" fill="#fff" />
+          </svg>
+        ) : (
+          <Play size={24} />
+        )}
+        <span>{youtubeImage ? "YouTube" : "Video"}</span>
       </span>
     </>
   );
@@ -69,7 +76,10 @@ export function ProductGallery({
   media?: ProductMedia[];
 }) {
   const items: ProductMedia[] = media?.length
-    ? media
+    ? [
+        ...media.filter((item) => item.type === "image"),
+        ...media.filter((item) => item.type === "video"),
+      ]
     : image
       ? [{ type: "image", src: image, alt: name }]
       : [];

@@ -120,8 +120,9 @@ export default async function Home() {
             <span className="eyebrow">CÁC HÃNG CHÚNG TÔI CUNG CẤP</span>
             <h2>Thương hiệu bạn tin chọn</h2>
             <p>
-              Kết nối nhu cầu của bạn với thiết bị từ Olympus, Thermo, Schölly,
-              Renda và nhiều hãng khác.
+              Kết nối nhu cầu của bạn với thiết bị từ Olympus, Thermo Fisher
+              Scientific, Schölly, KARL STORZ, Stryker, GE HealthCare, Dräger,
+              Mindray và nhiều hãng khác.
             </p>
           </div>
           <a href="#tu-van" className="text-link">
@@ -136,7 +137,14 @@ export default async function Home() {
               image: "/images/brands/thermo-fisher.svg",
             },
             { name: "Schölly", image: "/images/brands/schoelly.svg" },
-            { name: "Renda", image: null },
+            { name: "KARL STORZ", image: "/images/brands/karl-storz.svg" },
+            { name: "Stryker", image: "/images/brands/stryker.png" },
+            {
+              name: "GE HealthCare",
+              image: "/images/brands/ge-healthcare.webp",
+            },
+            { name: "Dräger", image: "/images/brands/draeger.svg" },
+            { name: "Mindray", image: "/images/brands/mindray.png" },
           ].map((brand) => (
             <a
               href="#tu-van"
@@ -144,17 +152,15 @@ export default async function Home() {
               key={brand.name}
               aria-label={"Tư vấn thiết bị " + brand.name}
             >
-              <div className="supplied-brand-logo">
-                {brand.image ? (
-                  <Image
-                    src={brand.image}
-                    alt={brand.name}
-                    width={200}
-                    height={80}
-                  />
-                ) : (
-                  <span className="brand-wordmark">{brand.name}</span>
-                )}
+              <div
+                className={`supplied-brand-logo${brand.name === "KARL STORZ" ? " supplied-brand-logo-storz" : ""}`}
+              >
+                <Image
+                  src={brand.image}
+                  alt={brand.name}
+                  width={200}
+                  height={80}
+                />
               </div>
               <span className="supplied-brand-label">
                 {brand.name}

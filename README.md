@@ -29,11 +29,13 @@ SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
 
 Chưa cấu hình: catalogue hiển thị trạng thái trống, sản phẩm/danh mục không tồn tại dùng not-found; API quản trị trả 503. Không tự chuyển sang sản phẩm demo. Có cấu hình nhưng truy vấn lỗi: hiển thị error boundary, không che lỗi bằng dữ liệu giả.
 
+Dữ liệu catalogue công khai được cache phía server với chu kỳ làm mới 60 giây. Thao tác lưu/xóa thành công qua API quản trị xóa cache catalogue; lần đọc tiếp theo lấy dữ liệu mới. Nếu sửa trực tiếp trong Supabase, lần truy cập sau khi cache hết hạn kích hoạt làm mới nền. Truy vấn quản trị và phiên đăng nhập không dùng cache này.
+
 ### Migration và khởi tạo danh mục
 
 Dùng SQL Editor của Supabase với tài khoản sở hữu dự án:
 
-1. Chạy **một lần** `database/migrations/001_catalog.sql`. `database/schema.sql` là bản đầy đủ tương đương cho dự án mới, **không chạy cả hai**.
+1. Chạy lần lượt `database/migrations/001_catalog.sql` và `database/migrations/002_category_icons.sql`. Với dự án mới có thể chạy `database/schema.sql` thay cho các migration, **không chạy cả hai cách**. Dự án đã chạy migration 001 chỉ cần chạy 002 để bổ sung lựa chọn icon.
 2. Chạy `database/seed.sql`: tạo sáu danh mục ban đầu, icon và thứ tự. Có thể chạy lại; không ghi đè danh mục đã chỉnh sửa.
 3. Kiểm tra tables `categories`, `products`, `catalog_admins`, RLS và các policy sau khi chạy.
 
@@ -59,9 +61,11 @@ Không tạo role admin qua UI hoặc endpoint công khai. Trang `/dang-ky` hi�
 
 ## Quản lý nội dung
 
-- **Danh mục:** tên, slug duy nhất (chữ thường không dấu/số/gạch ngang), mô tả ngắn, một trong sáu mã icon Lucide, thứ tự, Hiển thị/Ẩn. Hiển thị tăng dần theo thứ tự rồi tên.
+- **Danh mục:** tên, slug duy nhất (chữ thường không dấu/số/gạch ngang), mô tả ngắn, một trong 15 icon Lucide (bao gồm phẫu thuật, hồi sức, chẩn đoán hình ảnh, sản khoa, kiểm soát nhiễm khuẩn, vi sinh, nội soi, sinh thiết và tiết niệu), thứ tự, Hiển thị/Ẩn. Hiển thị tăng dần theo thứ tự rồi tên.
 - **Sản phẩm:** tên, slug, SKU duy nhất (chuẩn hóa viết hoa), model/thương hiệu tùy chọn, một danh mục chính, mô tả ngắn, ảnh chính, thư viện ảnh/video, tài liệu, Nháp/Đã xuất bản.
-- **Chi tiết:** Giới thiệu → Ứng dụng & lựa chọn (đoạn văn và/hoặc mỗi dòng một ý) → Thông số kỹ thuật. Dòng thông số có tên, giá trị, đơn vị và nhóm tùy chọn; thêm/xóa và nút Lên/Xuống để đổi thứ tự. Trường trống không hiển thị. Không chạy HTML nhập vào.
+- **Chi tiết:** Giới thiệu → Ứng dụng & lựa chọn (đoạn văn và/hoặc mỗi dòng một ý) → Thông số kỹ thuật. Phần Giới thiệu có trình soạn thảo Tiptap: tiêu đề, đậm/nghiêng/gạch chân, danh sách, liên kết, ảnh bằng URL kèm chú thích, bảng, hoàn tác/làm lại. Bôi đen chữ trước khi chèn liên kết. Nhấn Lưu sản phẩm để lưu bài viết; không tự lưu. Giới hạn 20.000 ký tự gồm định dạng. Dòng thông số có tên, giá trị, đơn vị và nhóm tùy chọn; thêm/xóa và nút Lên/Xuống để đổi thứ tự. Trường trống không hiển thị.
+
+Bài viết dùng cột `introduction` hiện có, có dấu nhận diện `<!--nha-article-v1-->`; không cần migration. Văn bản cũ vẫn hiển thị như văn bản thuần và được chuyển thành đoạn văn khi chỉnh sửa bằng trình soạn thảo. Nội dung định dạng được lọc HTML theo danh sách cho phép ở API khi lưu và ở trang sản phẩm khi hiển thị; không cho phép script, iframe, style hay thuộc tính sự kiện.
 - Ảnh/video/tài liệu dùng URL HTTPS hoặc đường dẫn public hiện có. Chưa có chức năng upload file; có thể đưa file đã xác minh vào Supabase Storage bằng Dashboard rồi lấy URL công khai. Video dùng URL tệp trực tiếp. Không dùng signed URL ngắn hạn cho catalogue lâu dài.
 - Ảnh sản phẩm dùng `next/image` với `unoptimized` để URL ngoài được tải trực tiếp ở trình duyệt, không mở trình tối ưu ảnh server cho host tùy ý. Không tạo ảnh khác model, không lấy ảnh minh họa danh mục làm ảnh sản phẩm.
 - Ẩn danh mục giữ nguyên khóa ngoại và trạng thái sản phẩm, nhưng các sản phẩm đó không xuất hiện công khai. Hiện lại danh mục sẽ hiện lại những sản phẩm đã xuất bản; muốn giữ ẩn một sản phẩm thì chuyển sản phẩm về Nháp.

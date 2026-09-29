@@ -1,6 +1,8 @@
 /** @jsxImportSource react */
 import { FileText, ArrowRight } from "lucide-react";
 import type { ProductRecord } from "@/lib/catalog";
+import { ARTICLE_PREFIX } from "@/lib/article-format";
+import { cleanArticle } from "@/lib/article-html";
 export function ProductInformation({ product: p }: { product: ProductRecord }) {
   const details = {
     introduction: p.introduction,
@@ -14,7 +16,9 @@ export function ProductInformation({ product: p }: { product: ProductRecord }) {
         <section id="gioi-thieu">
           <span className="eyebrow">TỔNG QUAN</span>
           <h2>Giới thiệu sản phẩm</h2>
-          <p className="catalog-prose">{details.introduction}</p>
+          {details.introduction.startsWith(ARTICLE_PREFIX) ? (
+            <div className="article-body" dangerouslySetInnerHTML={{ __html: cleanArticle(details.introduction.slice(ARTICLE_PREFIX.length)) }} />
+          ) : <p className="catalog-prose">{details.introduction}</p>}
         </section>
       )}
       {!!(details.highlights.length || p.applications) && (

@@ -184,11 +184,8 @@
   height: 76px;
   object-fit: contain;
 }
-.brand-wordmark {
-  font-size: 35px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #14658b;
+.supplied-brand-logo-storz {
+  background: #005a9c;
 }
 .supplied-brand-label {
   padding: 15px 18px;
@@ -294,7 +291,7 @@ html[data-theme="dark"] .medical-banner-bottom {
 body {
   margin: 0;
   color: var(--ink);
-  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+  font-family: var(--font-site), Arial, Helvetica, sans-serif;
   font-size: 16px;
   line-height: 1.65;
   background: white;
@@ -4671,6 +4668,87 @@ html[data-theme="dark"] .auth-card {
   font-weight: 400;
   color: var(--muted);
   margin-bottom: 4px;
+}
+.catalog-product-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: 12px;
+  background: var(--surface);
+}
+.catalog-product-card:hover {
+  transform: none;
+}
+.catalog-product-card .product-image {
+  flex-shrink: 0;
+}
+.catalog-product-card .product-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 18px;
+}
+.catalog-product-card .product-category {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+.catalog-product-card .product-info h3 {
+  font-family: inherit;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  height: 78px;
+  min-height: 78px;
+  margin: 0;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+  letter-spacing: normal;
+  overflow-wrap: anywhere;
+}
+.catalog-product-card .product-code {
+  display: grid;
+  grid-template-rows: repeat(2, 20px);
+  gap: 4px;
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 20px;
+}
+.catalog-product-card .product-code > div {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 8px;
+}
+.catalog-product-card .product-code > div > span:first-child {
+  font-weight: 600;
+}
+.catalog-product-card .product-code > div > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.catalog-product-card .product-price {
+  margin-top: auto;
+  padding-top: 14px;
+  border-color: var(--line);
+}
+.catalog-product-card .product-quote {
+  width: 100%;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 600;
 }
 @media (max-width: 760px) {
   .catalog-category-section .category-grid {

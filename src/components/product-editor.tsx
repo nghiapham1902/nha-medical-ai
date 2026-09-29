@@ -15,6 +15,8 @@ import {
 import type { Category, ProductInput } from "@/lib/catalog";
 import { ProductImagePreview } from "./product-image-preview";
 import { videoSource } from "@/lib/video-source";
+import dynamic from "next/dynamic";
+const ArticleEditor = dynamic(() => import("./article-editor").then(m => m.ArticleEditor), { ssr: false, loading: () => <p>Đang tải trình soạn thảo…</p> });
 
 function videoPreviewImage(src: string, poster?: string) {
   if (poster?.trim()) return poster;
@@ -150,7 +152,7 @@ export function ProductEditor({
               Giới thiệu đặc điểm, công dụng và những lưu ý khi lựa chọn sản
               phẩm. Có thể để trống phần chưa có thông tin.
             </p>
-            {field("introduction", "Giới thiệu", false, true, 20000)}
+            <ArticleEditor value={product.introduction} onChange={introduction => setProduct({ ...product, introduction })} />
             {field(
               "applications",
               "Ứng dụng & lựa chọn — đoạn văn",

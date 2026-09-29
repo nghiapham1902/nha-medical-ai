@@ -16,7 +16,10 @@ export default async function Page({
   searchParams: Promise<{ category?: string; q?: string }>;
 }) {
   const query = await searchParams;
-  const categories = await repository.getCategories();
+  const [categories, products] = await Promise.all([
+    repository.getCategories(),
+    query.category ? Promise.resolve([]) : repository.getProducts(),
+  ]);
   if (query.category) {
     const category = categories.find(
       (c) => c.slug === query.category || c.name === query.category,
@@ -24,7 +27,6 @@ export default async function Page({
     if (!category) notFound();
     redirect(`/danh-muc/${category.slug}`);
   }
-  const products = await repository.getProducts();
   return (
     <>
       <PageHeading
