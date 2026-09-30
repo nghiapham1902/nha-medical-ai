@@ -114,9 +114,6 @@ export function Footer({
             <br />
             phòng thí nghiệm và nghiên cứu khoa học.
           </p>
-          <span className="demo-pill">
-            Website demo • Không nhận thanh toán
-          </span>
         </div>
         <div>
           <h3>Khám phá</h3>
@@ -152,7 +149,7 @@ export function Footer({
         </div>
       </div>
       <div className="container footer-bottom">
-        <span>© 2026 NHA Medical. Bản giao diện thử nghiệm.</span>
+        <span>© 2026 NHA Medical.</span>
         <span>Thông tin và hình ảnh chỉ mang tính minh họa.</span>
       </div>
     </footer>
@@ -199,7 +196,7 @@ export function ContactForm() {
     >
       <span className="eyebrow">CHÚNG TÔI SẴN SÀNG LẮNG NGHE</span>
       <h2>Trao đổi nhu cầu của bạn</h2>
-      <p>Biểu mẫu demo lưu trên trình duyệt này, chưa gửi đến NHA Medical.</p>
+      <p>Yêu cầu được lưu trên trình duyệt này, chưa gửi đến NHA Medical.</p>
       <div className="form-grid">
         <label>
           Họ và tên *
@@ -259,8 +256,8 @@ export function ContactForm() {
         />
       </label>
       <label className="checkbox">
-        <input type="checkbox" required /> Tôi đồng ý lưu thông tin trên trình
-        duyệt để thử nghiệm biểu mẫu.
+        <input type="checkbox" required /> Tôi đồng ý lưu thông tin yêu cầu trên
+        trình duyệt này.
       </label>
       <button className="button primary" disabled={status === "loading"}>
         {status === "loading" ? (
@@ -268,13 +265,13 @@ export function ContactForm() {
         ) : (
           <ArrowRight size={17} />
         )}{" "}
-        Lưu yêu cầu demo
+        Lưu yêu cầu
       </button>
       <div role="status">
         {status === "success" && (
           <p className="success">
-            Đã lưu yêu cầu demo. Bạn có thể xem trong Dashboard → Báo giá. Chưa
-            có email nào được gửi.
+            Đã lưu yêu cầu trên trình duyệt này. Yêu cầu chưa được gửi đến NHA
+            Medical.
           </p>
         )}
         {status === "error" && (

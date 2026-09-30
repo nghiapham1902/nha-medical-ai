@@ -25,7 +25,7 @@ export default function Image() {
         Thiết bị · Vật tư · Giải pháp
       </div>
       <div style={{ fontSize: 22, marginTop: 60, color: "#a7cbc9" }}>
-        Website demo
+        Thiết bị y tế & phòng thí nghiệm
       </div>
     </div>,
     size,

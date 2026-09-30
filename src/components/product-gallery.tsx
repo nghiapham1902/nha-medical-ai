@@ -11,6 +11,7 @@ import {
   ZoomIn,
   X,
 } from "lucide-react";
+import { canOptimizeImage } from "@/lib/image-policy";
 import type { ProductMedia } from "@/lib/data";
 
 import { videoSource } from "@/lib/video-source";
@@ -42,7 +43,7 @@ function VideoThumbnail({
           src={thumbnail}
           alt=""
           fill
-          unoptimized
+          unoptimized={!canOptimizeImage(thumbnail)}
           sizes="88px"
           className="gallery-video-thumbnail"
           onError={() => setFailedSources((sources) => [...sources, thumbnail])}
@@ -85,7 +86,8 @@ export function ProductGallery({
       : [];
   const [index, setIndex] = useState(0);
   const [failed, setFailed] = useState(false);
-  const fallbackImage = image || items.find((item) => item.type === "image")?.src;
+  const fallbackImage =
+    image || items.find((item) => item.type === "image")?.src;
   const dialog = useRef<HTMLDialogElement>(null);
   const current = items[index] ?? items[0];
   const select = (next: number) => {
@@ -150,7 +152,7 @@ export function ProductGallery({
             src={current.src}
             alt={current.alt}
             fill
-            unoptimized
+            unoptimized={!canOptimizeImage(current.src)}
             priority={index === 0}
             sizes="(max-width: 768px) 100vw, 50vw"
             onError={() => setFailed(true)}
@@ -210,7 +212,7 @@ export function ProductGallery({
               src={current.src}
               alt={current.alt}
               fill
-              unoptimized
+              unoptimized={!canOptimizeImage(current.src)}
               sizes="90vw"
             />
           </div>
@@ -246,7 +248,13 @@ export function ProductGallery({
               onClick={() => select(i)}
             >
               {item.type === "image" ? (
-                <Image src={item.src} alt="" fill unoptimized sizes="88px" />
+                <Image
+                  src={item.src}
+                  alt=""
+                  fill
+                  unoptimized={!canOptimizeImage(item.src)}
+                  sizes="88px"
+                />
               ) : (
                 <VideoThumbnail item={item} fallback={fallbackImage} />
               )}

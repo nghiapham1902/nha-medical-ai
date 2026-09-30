@@ -14,29 +14,33 @@ import "./home.css";
 import { ContactForm } from "@/components/store";
 import { CategoryTiles } from "@/components/category-tiles";
 import { repository } from "@/lib/repository";
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
-import { seo, jsonLd, siteUrl } from "@/lib/seo";
+import { seo, absoluteUrl, siteDescription } from "@/lib/seo";
+import { StructuredData, organization } from "@/components/structured-data";
 export const metadata = seo(
-  "Giải pháp y tế & phòng thí nghiệm",
-  "Thiết bị và vật tư phục vụ y tế, phòng thí nghiệm và khoa học. Khám phá giao diện demo NHA Medical.",
+  "Thiết bị Y tế & Phòng thí nghiệm",
+  siteDescription,
   "/",
 );
 export default async function Home() {
   const categories = await repository.getCategories();
   return (
     <div className="home-page">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: jsonLd({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "NHA Medical",
-            url: siteUrl,
-            description:
-              "Website giới thiệu demo thiết bị y tế và phòng thí nghiệm.",
-          }),
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            organization,
+            {
+              "@type": "WebSite",
+              "@id": absoluteUrl("/#website"),
+              name: "NHA Medical",
+              url: absoluteUrl("/"),
+              publisher: { "@id": organization["@id"] },
+              inLanguage: "vi-VN",
+            },
+          ],
         }}
       />
       <section className="medical-banner">
@@ -46,13 +50,17 @@ export default async function Home() {
               <span /> NHA MEDICAL · Y TẾ & KHOA HỌC
             </span>
             <h1>
-              Kết nối công nghệ.
+              Thiết bị y tế &amp;
               <br />
-              <span>Nâng tầm chăm sóc.</span>
+              <span>phòng thí nghiệm</span>
             </h1>
+            <p className="medical-banner-slogan">
+              Kết nối công nghệ. Nâng tầm chăm sóc.
+            </p>
             <p>
-              Thiết bị y tế, phòng thí nghiệm và vật tư từ các hãng bạn tin
-              chọn. Cùng NHA Medical tìm giải pháp phù hợp cho đơn vị của bạn.
+              Tìm hiểu thiết bị y tế, thiết bị phòng thí nghiệm và vật tư. Cùng
+              NHA Medical trao đổi nhu cầu, tham khảo thông số và lựa chọn giải
+              pháp thiết bị phù hợp.
             </p>
             <div className="medical-banner-actions">
               <Link href="/san-pham" className="button primary">
@@ -302,7 +310,7 @@ export default async function Home() {
             ],
             [
               "Biểu mẫu đã gửi đến NHA Medical chưa?",
-              "Website hiện là bản demo. Yêu cầu chỉ được lưu trên trình duyệt bạn đang sử dụng, chưa gửi email hoặc chuyển đến NHA Medical.",
+              "Yêu cầu chỉ được lưu trên trình duyệt bạn đang sử dụng, chưa gửi email hoặc chuyển đến NHA Medical.",
             ],
           ].map(([question, answer]) => (
             <details key={question}>

@@ -4,19 +4,24 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check, MessageCircle } from "lucide-react";
 import { repository } from "@/lib/repository";
-import { seo, jsonLd } from "@/lib/seo";
+import { seo, productTitle, productDescription } from "@/lib/seo";
+import { BreadcrumbData, ProductData } from "@/components/structured-data";
 import "./product-detail.css";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
+export function generateStaticParams() {
+  return [];
+}
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const p = await repository.getProduct((await params).slug);
-  return p
-    ? seo(p.name, p.description, `/san-pham/${p.slug}`)
-    : { title: "Không tìm thấy sản phẩm" };
+  if (!p) notFound();
+  return seo(productTitle(p), productDescription(p), `/san-pham/${p.slug}`, {
+    image: p.image || p.media.find((m) => m.type === "image")?.src,
+  });
 }
 export default async function Page({
   params,
@@ -56,27 +61,21 @@ export default async function Page({
     .slice(0, 3);
   return (
     <div className="pdp container">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: jsonLd({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: p.name,
-            sku: p.sku,
-            model: p.model || undefined,
-            brand: p.brand ? { "@type": "Brand", name: p.brand } : undefined,
-            description: p.description,
-            image: p.media
-              ?.filter((item) => item.type === "image")
-              .map((item) => item.src),
-          }),
-        }}
+      <ProductData product={p} />
+      <BreadcrumbData
+        items={[
+          { name: "Trang chủ", path: "/" },
+          { name: "Sản phẩm", path: "/san-pham" },
+          { name: p.category, path: `/danh-muc/${p.categorySlug}` },
+          { name: p.name, path: `/san-pham/${p.slug}` },
+        ]}
       />
       <nav className="pdp-breadcrumb" aria-label="Đường dẫn">
         <Link href="/">Trang chủ</Link>
         <span aria-hidden="true">/</span>
         <Link href="/san-pham">Sản phẩm</Link>
+        <span aria-hidden="true">/</span>
+        <Link href={`/danh-muc/${p.categorySlug}`}>{p.category}</Link>
         <span aria-hidden="true">/</span>
         <span aria-current="page">{p.name}</span>
       </nav>
@@ -150,7 +149,9 @@ export default async function Page({
             Yêu cầu tư vấn
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
-          <small>Biểu mẫu hiện là bản demo, chỉ lưu trên trình duyệt.</small>
+          <small>
+            Yêu cầu chỉ lưu trên trình duyệt, chưa gửi đến NHA Medical.
+          </small>
         </aside>
       </div>
       {!!related.length && (

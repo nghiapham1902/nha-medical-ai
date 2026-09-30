@@ -4,7 +4,7 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { seo } from "@/lib/seo";
 export const metadata = seo(
   "Liên hệ & yêu cầu báo giá",
-  "Gửi nhu cầu thiết bị và vật tư cho NHA Medical. Biểu mẫu thử nghiệm lưu cục bộ.",
+  "Thông tin liên hệ NHA Medical để trao đổi về thiết bị y tế, phòng thí nghiệm và vật tư. Tham khảo địa chỉ, điện thoại và chuẩn bị nhu cầu tư vấn.",
   "/lien-he",
 );
 export default function Page() {

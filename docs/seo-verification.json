@@ -1,0 +1,327 @@
+{
+  "environment": "Local production build; public canonical set to https://nha-medical-ai.vercel.app. This is not a live deployment audit.",
+  "tests": {
+    "passed": 25,
+    "skipped": 1,
+    "skippedReason": "Supabase write integration requires a dedicated test environment."
+  },
+  "sitemap": {
+    "status": 200,
+    "contentType": "application/xml",
+    "urlCount": 21,
+    "lastModifiedCount": 13
+  },
+  "robots": {
+    "status": 200,
+    "contentType": "text/plain",
+    "text": "User-Agent: *\nAllow: /\nDisallow: /dashboard\nDisallow: /api/\n\nSitemap: https://nha-medical-ai.vercel.app/sitemap.xml\n"
+  },
+  "pages": [
+    {
+      "route": "/",
+      "status": 200,
+      "cacheControl": "s-maxage=60, stale-while-revalidate=31535940",
+      "nextCache": "STALE",
+      "title": "Thiết bị Y tế & Phòng thí nghiệm | NHA Medical",
+      "description": "Tìm hiểu thiết bị y tế, thiết bị phòng thí nghiệm và vật tư tại NHA Medical. Tham khảo thông tin sản phẩm và trao đổi nhu cầu tư vấn lựa chọn thiết bị phù hợp.",
+      "canonical": "https://nha-medical-ai.vercel.app/",
+      "h1": ["Thiết bị y tế &phòng thí nghiệm"],
+      "ogTitle": "Thiết bị Y tế & Phòng thí nghiệm | NHA Medical",
+      "ogImage": "https://nha-medical-ai.vercel.app/opengraph-image",
+      "twitterImage": "https://nha-medical-ai.vercel.app/opengraph-image",
+      "robots": "index, follow",
+      "schemas": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://nha-medical-ai.vercel.app/#organization",
+              "name": "NHA Medical",
+              "url": "https://nha-medical-ai.vercel.app/",
+              "logo": "https://nha-medical-ai.vercel.app/images/nha-logo.svg",
+              "description": "Tìm hiểu thiết bị y tế, thiết bị phòng thí nghiệm và vật tư tại NHA Medical. Tham khảo thông tin sản phẩm và trao đổi nhu cầu tư vấn lựa chọn thiết bị phù hợp."
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://nha-medical-ai.vercel.app/#website",
+              "name": "NHA Medical",
+              "url": "https://nha-medical-ai.vercel.app/",
+              "publisher": {
+                "@id": "https://nha-medical-ai.vercel.app/#organization"
+              },
+              "inLanguage": "vi-VN"
+            }
+          ]
+        }
+      ],
+      "horizontalOverflow": false
+    },
+    {
+      "route": "/san-pham",
+      "status": 200,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "title": "Thiết bị y tế, phòng thí nghiệm & vật tư | NHA Medical",
+      "description": "Tham khảo danh mục thiết bị y tế, thiết bị phòng thí nghiệm và vật tư tại NHA Medical. Tìm sản phẩm theo tên, model, hãng và nhu cầu sử dụng.",
+      "canonical": "https://nha-medical-ai.vercel.app/san-pham",
+      "h1": ["Sản phẩm & giải pháp"],
+      "ogTitle": "Thiết bị y tế, phòng thí nghiệm & vật tư | NHA Medical",
+      "ogImage": "https://nha-medical-ai.vercel.app/opengraph-image",
+      "twitterImage": "https://nha-medical-ai.vercel.app/opengraph-image",
+      "robots": "index, follow",
+      "schemas": [],
+      "horizontalOverflow": false
+    },
+    {
+      "route": "/san-pham?page=2",
+      "status": 200,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "title": "Thiết bị y tế, phòng thí nghiệm & vật tư – Trang 2 | NHA Medical",
+      "description": "Tham khảo danh mục thiết bị y tế, thiết bị phòng thí nghiệm và vật tư tại NHA Medical. Tìm sản phẩm theo tên, model, hãng và nhu cầu sử dụng.",
+      "canonical": "https://nha-medical-ai.vercel.app/san-pham?page=2",
+      "h1": ["Sản phẩm & giải pháp"],
+      "ogTitle": "Thiết bị y tế, phòng thí nghiệm & vật tư – Trang 2 | NHA Medical",
+      "ogImage": "https://nha-medical-ai.vercel.app/opengraph-image",
+      "twitterImage": "https://nha-medical-ai.vercel.app/opengraph-image",
+      "robots": "index, follow",
+      "schemas": [],
+      "horizontalOverflow": false
+    },
+    {
+      "route": "/san-pham/dau-camera-noi-soi-phau-thuat-schoelly-flexivision-4k-uhd-zoom",
+      "status": 200,
+      "cacheControl": "s-maxage=60, stale-while-revalidate=31535940",
+      "nextCache": "STALE",
+      "title": "Đầu camera nội soi phẫu thuật Schölly FLEXIVISION 4K UHD Zoom | NHA Medical",
+      "description": "Đầu camera nội soi 4K UHD dùng cảm biến 3CMOS, hỗ trợ zoom quang 2×, ba phím chức năng có đèn và kết nối khóa với thị kính ống nội soi tiêu chuẩn.",
+      "canonical": "https://nha-medical-ai.vercel.app/san-pham/dau-camera-noi-soi-phau-thuat-schoelly-flexivision-4k-uhd-zoom",
+      "h1": ["Đầu camera nội soi phẫu thuật Schölly FLEXIVISION 4K UHD Zoom"],
+      "ogTitle": "Đầu camera nội soi phẫu thuật Schölly FLEXIVISION 4K UHD Zoom | NHA Medical",
+      "ogImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmzc8EklejdFbOY_-tBKgek9dRW4cGr82xfbKyogm_DA&s=10",
+      "twitterImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmzc8EklejdFbOY_-tBKgek9dRW4cGr82xfbKyogm_DA&s=10",
+      "robots": "index, follow",
+      "schemas": [
+        {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "@id": "https://nha-medical-ai.vercel.app/san-pham/dau-camera-noi-soi-phau-thuat-schoelly-flexivision-4k-uhd-zoom#product",
+          "url": "https://nha-medical-ai.vercel.app/san-pham/dau-camera-noi-soi-phau-thuat-schoelly-flexivision-4k-uhd-zoom",
+          "name": "Đầu camera nội soi phẫu thuật Schölly FLEXIVISION 4K UHD Zoom",
+          "description": "Đầu camera nội soi 4K UHD dùng cảm biến 3CMOS, hỗ trợ zoom quang 2×, ba phím chức năng có đèn và kết nối khóa với thị kính ống nội soi tiêu chuẩn.",
+          "sku": "SCHOLLY-CAMERA-95-3905",
+          "model": "FLEXIVISION Camera Head 4K UHD Zoom / 95-3905",
+          "brand": {
+            "@type": "Brand",
+            "name": "Schölly"
+          },
+          "image": [
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmzc8EklejdFbOY_-tBKgek9dRW4cGr82xfbKyogm_DA&s=10",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvH4MH_2FJVhBYvnlARJUeAo2SVkdsQi1oyctnNKNiyg&s",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0sSO-IiWKBtKlfCKaZ2oyxCipjyUcl98vfEUFtLwO0oTXGg57Pb1fObsn&s=10"
+          ],
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "name": "Độ phân giải hình ảnh",
+              "value": "3.840 × 2.160",
+              "unitText": "pixel"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Tốc độ hình ảnh",
+              "value": "50 / 60",
+              "unitText": "hình/giây, quét liên tục"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Cảm biến",
+              "value": "3 × 1/3″ CMOS"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Zoom quang",
+              "value": "2",
+              "unitText": "x"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Zoom kỹ thuật số",
+              "value": "3",
+              "unitText": "x"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Tiêu cự zoom",
+              "value": "14,25–28",
+              "unitText": "mm"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Phím chức năng",
+              "value": "3 phím có đèn, lập trình riêng"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Kết nối ống nội soi",
+              "value": "Thị kính tiêu chuẩn, có khóa"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Chiều dài camera",
+              "value": "3.5",
+              "unitText": "m"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Khối lượng đầu camera, không bao gồm cáp",
+              "value": "330",
+              "unitText": "g"
+            },
+            {
+              "@type": "PropertyValue",
+              "name": "Đầu cắm chống nước",
+              "value": "Có"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Trang chủ",
+              "item": "https://nha-medical-ai.vercel.app/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Sản phẩm",
+              "item": "https://nha-medical-ai.vercel.app/san-pham"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Phẫu thuật và dụng cụ nội soi",
+              "item": "https://nha-medical-ai.vercel.app/danh-muc/phau-thuat-va-dung-cu-noi-soi"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "Đầu camera nội soi phẫu thuật Schölly FLEXIVISION 4K UHD Zoom",
+              "item": "https://nha-medical-ai.vercel.app/san-pham/dau-camera-noi-soi-phau-thuat-schoelly-flexivision-4k-uhd-zoom"
+            }
+          ]
+        }
+      ],
+      "horizontalOverflow": false
+    },
+    {
+      "route": "/danh-muc/kinh-hien-vi",
+      "status": 200,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "title": "Kính hiển vi | NHA Medical",
+      "description": "Tìm hiểu kính hiển vi tại NHA Medical. Tham khảo sản phẩm, thông số và trao đổi nhu cầu lựa chọn thiết bị phù hợp.",
+      "canonical": "https://nha-medical-ai.vercel.app/danh-muc/kinh-hien-vi",
+      "h1": ["Kính hiển vi"],
+      "ogTitle": "Kính hiển vi | NHA Medical",
+      "ogImage": "https://nha-medical-ai.vercel.app/opengraph-image",
+      "twitterImage": "https://nha-medical-ai.vercel.app/opengraph-image",
+      "robots": "index, follow",
+      "schemas": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Trang chủ",
+              "item": "https://nha-medical-ai.vercel.app/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Sản phẩm",
+              "item": "https://nha-medical-ai.vercel.app/san-pham"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Kính hiển vi",
+              "item": "https://nha-medical-ai.vercel.app/danh-muc/kinh-hien-vi"
+            }
+          ]
+        }
+      ],
+      "horizontalOverflow": false
+    },
+    {
+      "route": "/tin-tuc/lua-chon-thiet-bi-phong-thi-nghiem",
+      "status": 200,
+      "cacheControl": "s-maxage=60, stale-while-revalidate=31535940",
+      "nextCache": "STALE",
+      "title": "Những điều cần cân nhắc khi lựa chọn thiết bị phòng thí nghiệm | NHA Medical",
+      "description": "Từ nhu cầu sử dụng đến dịch vụ hậu mãi: xây dựng danh sách yêu cầu trước khi đầu tư thiết bị.",
+      "canonical": "https://nha-medical-ai.vercel.app/tin-tuc/lua-chon-thiet-bi-phong-thi-nghiem",
+      "h1": ["Những điều cần cân nhắc khi lựa chọn thiết bị phòng thí nghiệm"],
+      "ogTitle": "Những điều cần cân nhắc khi lựa chọn thiết bị phòng thí nghiệm | NHA Medical",
+      "ogImage": "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=900&q=85",
+      "twitterImage": "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=900&q=85",
+      "robots": "index, follow",
+      "schemas": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Trang chủ",
+              "item": "https://nha-medical-ai.vercel.app/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Tin tức & kiến thức",
+              "item": "https://nha-medical-ai.vercel.app/tin-tuc"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Những điều cần cân nhắc khi lựa chọn thiết bị phòng thí nghiệm",
+              "item": "https://nha-medical-ai.vercel.app/tin-tuc/lua-chon-thiet-bi-phong-thi-nghiem"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "Những điều cần cân nhắc khi lựa chọn thiết bị phòng thí nghiệm",
+          "description": "Từ nhu cầu sử dụng đến dịch vụ hậu mãi: xây dựng danh sách yêu cầu trước khi đầu tư thiết bị.",
+          "image": "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=900&q=85",
+          "datePublished": "2026-09-18",
+          "author": {
+            "@type": "Organization",
+            "name": "NHA Medical",
+            "url": "https://nha-medical-ai.vercel.app/"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "@id": "https://nha-medical-ai.vercel.app/#organization",
+            "name": "NHA Medical",
+            "url": "https://nha-medical-ai.vercel.app/",
+            "logo": "https://nha-medical-ai.vercel.app/images/nha-logo.svg",
+            "description": "Tìm hiểu thiết bị y tế, thiết bị phòng thí nghiệm và vật tư tại NHA Medical. Tham khảo thông tin sản phẩm và trao đổi nhu cầu tư vấn lựa chọn thiết bị phù hợp."
+          },
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://nha-medical-ai.vercel.app/tin-tuc/lua-chon-thiet-bi-phong-thi-nghiem"
+          }
+        }
+      ],
+      "horizontalOverflow": false
+    }
+  ]
+}

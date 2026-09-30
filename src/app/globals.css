@@ -1256,8 +1256,9 @@ footer {
   padding: 22px;
   height: fit-content;
 }
-.filters h3 {
+.filters :is(h2, h3) {
   margin-bottom: 25px;
+  font-size: 18px;
 }
 .filters label {
   font-size: 14px;
@@ -1342,7 +1343,7 @@ footer {
   gap: 8px;
   margin-top: 30px;
 }
-.pagination button {
+.pagination :is(button, a) {
   background: white;
   border: 1px solid var(--line);
   height: 36px;
@@ -2947,7 +2948,7 @@ td small {
     gap: 12px;
     padding: 18px;
   }
-  .filters h3 {
+  .filters :is(h2, h3) {
     grid-column: 1/-1;
     margin-bottom: 0;
     font-size: 18px;
@@ -3568,7 +3569,7 @@ html[data-theme="dark"]
     .header-search,
     .input-icon,
     .secondary,
-    .pagination button,
+    .pagination :is(button, a),
     .quantity button
   ) {
   background: #192e3a;
@@ -4754,4 +4755,16 @@ html[data-theme="dark"] .auth-card {
   .catalog-category-section .category-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+.medical-banner-copy > .medical-banner-slogan {
+  font-size: clamp(17px, 1.6vw, 22px);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.pagination a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }

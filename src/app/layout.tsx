@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import "./article.css";
-import { siteUrl } from "@/lib/seo";
+import { siteUrl, siteDescription } from "@/lib/seo";
 import { ThemeProvider } from "@/components/theme";
 const siteFont = Be_Vietnam_Pro({
   subsets: ["latin", "latin-ext", "vietnamese"],
@@ -13,11 +13,10 @@ const siteFont = Be_Vietnam_Pro({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "NHA Medical | Giải pháp y tế & phòng thí nghiệm",
+    default: "Thiết bị Y tế & Phòng thí nghiệm | NHA Medical",
     template: "%s | NHA Medical",
   },
-  description:
-    "Khám phá thiết bị phòng thí nghiệm, vật tư và thiết bị y tế tại NHA Medical. Website demo.",
+  description: siteDescription,
   openGraph: {
     siteName: "NHA Medical",
     locale: "vi_VN",

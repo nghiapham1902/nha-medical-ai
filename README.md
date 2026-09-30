@@ -66,6 +66,7 @@ Không tạo role admin qua UI hoặc endpoint công khai. Trang `/dang-ky` hi�
 - **Chi tiết:** Giới thiệu → Ứng dụng & lựa chọn (đoạn văn và/hoặc mỗi dòng một ý) → Thông số kỹ thuật. Phần Giới thiệu có trình soạn thảo Tiptap: tiêu đề, đậm/nghiêng/gạch chân, danh sách, liên kết, ảnh bằng URL kèm chú thích, bảng, hoàn tác/làm lại. Bôi đen chữ trước khi chèn liên kết. Nhấn Lưu sản phẩm để lưu bài viết; không tự lưu. Giới hạn 20.000 ký tự gồm định dạng. Dòng thông số có tên, giá trị, đơn vị và nhóm tùy chọn; thêm/xóa và nút Lên/Xuống để đổi thứ tự. Trường trống không hiển thị.
 
 Bài viết dùng cột `introduction` hiện có, có dấu nhận diện `<!--nha-article-v1-->`; không cần migration. Văn bản cũ vẫn hiển thị như văn bản thuần và được chuyển thành đoạn văn khi chỉnh sửa bằng trình soạn thảo. Nội dung định dạng được lọc HTML theo danh sách cho phép ở API khi lưu và ở trang sản phẩm khi hiển thị; không cho phép script, iframe, style hay thuộc tính sự kiện.
+
 - Ảnh/video/tài liệu dùng URL HTTPS hoặc đường dẫn public hiện có. Chưa có chức năng upload file; có thể đưa file đã xác minh vào Supabase Storage bằng Dashboard rồi lấy URL công khai. Video dùng URL tệp trực tiếp. Không dùng signed URL ngắn hạn cho catalogue lâu dài.
 - Ảnh sản phẩm dùng `next/image` với `unoptimized` để URL ngoài được tải trực tiếp ở trình duyệt, không mở trình tối ưu ảnh server cho host tùy ý. Không tạo ảnh khác model, không lấy ảnh minh họa danh mục làm ảnh sản phẩm.
 - Ẩn danh mục giữ nguyên khóa ngoại và trạng thái sản phẩm, nhưng các sản phẩm đó không xuất hiện công khai. Hiện lại danh mục sẽ hiện lại những sản phẩm đã xuất bản; muốn giữ ẩn một sản phẩm thì chuyển sản phẩm về Nháp.
@@ -79,9 +80,9 @@ Bài viết dùng cột `introduction` hiện có, có dấu nhận diện `<!--
 - `/san-pham/[slug]`: nội dung thật từ repository; CTA truyền tên vào form liên hệ.
 - `/api/admin/categories`, `/api/admin/products`: GET danh sách; POST tạo; PUT sửa; DELETE xóa. PUT/DELETE cần `id` và `updated_at` bản ghi hiện tại. Không hỗ trợ mass assignment ID/thời điểm/quyền/giá; server chỉ lấy các trường được phép.
 - API kiểm tra đăng nhập bằng Supabase Auth và membership `catalog_admins`; cùng-origin cho mutation, kiểm tra JSON/giới hạn request 500 KB. DB áp dụng RLS cho cả REST trực tiếp: khách/non-admin chỉ đọc danh mục active và sản phẩm published thuộc danh mục active.
-- Public repository luôn dùng client **anonymous**, kể cả người xem đang là admin, tránh rò rỉ bản nháp. Truy vấn không cache giữa request, sitemap lấy cùng nguồn và không chứa bản nháp/danh mục ẩn.
+- Public repository luôn dùng client **anonymous**, kể cả người xem đang là admin, tránh rò rỉ bản nháp. Chỉ dữ liệu công khai được cache 60 giây với tag `public-catalog`; sitemap lấy cùng nguồn và không chứa bản nháp/danh mục ẩn.
 - Cookie admin và phản hồi quản trị không cache. Không proxy/cache CDN phản hồi có Set-Cookie. Dùng `middleware.ts` theo Next.js 15 để refresh phiên.
-- Next.js có thể trả 200 cho not-found sau khi đã bắt đầu stream, nhưng vẫn render giao diện not-found và `noindex`; kiểm tra bao gồm cả nội dung fallback, không chỉ HTTP status.
+- Sản phẩm/danh mục và phân trang không tồn tại trả HTTP 404. Metadata kiểm tra bản ghi trước khi trả HTML; các loading boundary public được gỡ để không phát HTTP 200 trước `notFound`. Loading của dashboard vẫn được giữ.
 
 Tài liệu nền tảng: [Supabase SSR](https://supabase.com/docs/guides/auth/server-side/creating-a-client?queryGroups=framework&framework=nextjs), [Supabase RLS](https://supabase.com/docs/guides/database/postgres/row-level-security), [Next.js not-found](https://nextjs.org/docs/app/api-reference/file-conventions/not-found).
 

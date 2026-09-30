@@ -8,7 +8,7 @@ import { labImage } from "@/lib/data";
 import { seo } from "@/lib/seo";
 export const metadata = seo(
   "Về NHA Medical",
-  "Định hướng cung cấp giải pháp thiết bị y tế và phòng thí nghiệm của NHA Medical. Nội dung giới thiệu demo.",
+  "Tìm hiểu định hướng của NHA Medical về thiết bị y tế, phòng thí nghiệm và vật tư; trao đổi nhu cầu để lựa chọn giải pháp phù hợp cho đơn vị.",
   "/gioi-thieu",
 );
 export default async function Page() {
@@ -38,8 +38,8 @@ export default async function Page() {
               pháp.
             </p>
             <p className="notice">
-              Nội dung giới thiệu demo. Hồ sơ pháp lý, năng lực, khách hàng và
-              đối tác cần được xác minh trước khi công bố.
+              Hồ sơ pháp lý, năng lực, khách hàng và đối tác cần được xác minh
+              trước khi công bố.
             </p>
             <Link href="/lien-he" className="button primary">
               Kết nối với chúng tôi <ArrowRight size={17} />

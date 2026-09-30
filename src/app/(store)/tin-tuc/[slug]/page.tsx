@@ -3,7 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { articles } from "@/lib/data";
 import { repository } from "@/lib/repository";
-import { seo, jsonLd } from "@/lib/seo";
+import { seo, absoluteUrl, articleDate } from "@/lib/seo";
+import {
+  StructuredData,
+  BreadcrumbData,
+  organization,
+} from "@/components/structured-data";
 export const dynamicParams = false;
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }));
@@ -14,9 +19,11 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const a = await repository.getArticle((await params).slug);
-  return a
-    ? seo(a.title, a.excerpt, `/tin-tuc/${a.slug}`)
-    : { title: "Không tìm thấy bài viết" };
+  if (!a) notFound();
+  return seo(a.title, a.excerpt, `/tin-tuc/${a.slug}`, {
+    type: "article",
+    image: a.image,
+  });
 }
 export default async function Page({
   params,
@@ -46,15 +53,33 @@ export default async function Page({
     ],
   };
   const c = content[a.slug];
+  const categories = await repository.getCategories();
+  const relatedCategories = categories
+    .filter((category) =>
+      a.slug === "quan-ly-vat-tu-y-te"
+        ? /vật tư/i.test(category.name)
+        : /phòng thí nghiệm|kính hiển vi/i.test(category.name),
+    )
+    .slice(0, 3);
   return (
     <article className="container article-detail section">
-      <div className="breadcrumbs">
-        <Link href="/tin-tuc">Tin tức & kiến thức</Link> / {a.category}
-      </div>
+      <BreadcrumbData
+        items={[
+          { name: "Trang chủ", path: "/" },
+          { name: "Tin tức & kiến thức", path: "/tin-tuc" },
+          { name: a.title, path: `/tin-tuc/${a.slug}` },
+        ]}
+      />
+      <nav className="breadcrumbs" aria-label="Đường dẫn">
+        <Link href="/">Trang chủ</Link> /{" "}
+        <Link href="/tin-tuc">Tin tức & kiến thức</Link> /{" "}
+        <span aria-current="page">{a.title}</span>
+      </nav>
       <span className="eyebrow">{a.category}</span>
       <h1>{a.title}</h1>
       <p className="article-meta">
-        {a.date} · Ban biên tập demo NHA Medical · 3 phút đọc
+        <time dateTime={articleDate(a.date)}>{a.date}</time> · NHA Medical · Nội
+        dung tham khảo
       </p>
       <Image
         src={a.image}
@@ -62,16 +87,31 @@ export default async function Page({
         width={1000}
         height={520}
         priority
+        sizes="(max-width: 768px) 100vw, 1000px"
       />
       <p className="article-lead">{a.excerpt}</p>
       <div className="notice">
-        Bài viết demo cung cấp thông tin tổ chức chung, không thay thế hướng dẫn
+        Bài viết cung cấp thông tin tham khảo chung, không thay thế hướng dẫn
         chuyên môn hoặc tài liệu nhà sản xuất.
       </div>
       <h2>{c[0]}</h2>
       <p>{c[1]}</p>
       <h2>{c[2]}</h2>
       <p>{c[3]}</p>
+      {!!relatedCategories.length && (
+        <section aria-label="Danh mục liên quan">
+          <h2>Tham khảo danh mục thiết bị và vật tư</h2>
+          {relatedCategories.map((category) => (
+            <Link
+              className="related-article"
+              key={category.id}
+              href={`/danh-muc/${category.slug}`}
+            >
+              {category.name} →
+            </Link>
+          ))}
+        </section>
+      )}
       <h2>Bài viết liên quan</h2>
       {articles
         .filter((x) => x.slug !== a.slug)
@@ -84,21 +124,24 @@ export default async function Page({
             {x.title} →
           </Link>
         ))}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: jsonLd({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: a.title,
-            description: a.excerpt,
-            image: a.image,
-            datePublished: `2026-09-${a.date.slice(0, 2)}T08:00:00+07:00`,
-            author: {
-              "@type": "Organization",
-              name: "NHA Medical — nội dung demo",
-            },
-          }),
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: a.title,
+          description: a.excerpt,
+          image: absoluteUrl(a.image),
+          datePublished: articleDate(a.date),
+          author: {
+            "@type": "Organization",
+            name: "NHA Medical",
+            url: absoluteUrl("/"),
+          },
+          publisher: organization,
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": absoluteUrl(`/tin-tuc/${a.slug}`),
+          },
         }}
       />
     </article>

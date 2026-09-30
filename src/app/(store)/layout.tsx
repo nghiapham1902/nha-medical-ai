@@ -1,12 +1,13 @@
 import { Header, Footer } from "@/components/store";
 import { repository } from "@/lib/repository";
-import { Suspense } from "react";
-export const dynamic = "force-dynamic";
-async function CatalogueFooter() {
+export const revalidate = 60;
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Await public data before rendering: a fallback must not send HTTP 200 before notFound.
   const categories = await repository.getCategories();
-  return <Footer catalogueCategories={categories} />;
-}
-export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <a className="skip-link" href="#main">
@@ -14,9 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </a>
       <Header />
       <main id="main">{children}</main>
-      <Suspense fallback={<Footer catalogueCategories={[]} />}>
-        <CatalogueFooter />
-      </Suspense>
+      <Footer catalogueCategories={categories} />
     </>
   );
 }

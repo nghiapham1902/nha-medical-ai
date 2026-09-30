@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
 const config: NextConfig = {
+  // Resolve metadata/notFound before streaming for real 404s on every user agent.
+  htmlLimitedBots: /.*/,
   images: {
     remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
     formats: ["image/avif", "image/webp"],

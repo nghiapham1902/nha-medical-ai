@@ -35,7 +35,9 @@ test("anonymous visitors cannot access dashboard or CRUD", async ({
     for (const method of ["POST", "PUT", "DELETE"]) {
       const result = await request.fetch(`/api/admin/${resource}`, {
         method,
-        headers: { Origin: new URL(baseURL!).origin },
+        headers: {
+          Origin: process.env.NEXT_PUBLIC_SITE_URL || new URL(baseURL!).origin,
+        },
         data: { name: "untrusted" },
       });
       expect([401, 503]).toContain(result.status());
@@ -60,7 +62,7 @@ test("SEO and missing category/product routes", async ({ request }) => {
     "/san-pham?category=khong-ton-tai",
   ]) {
     const response = await request.get(route);
-    expect([200, 404]).toContain(response.status());
+    expect(response.status()).toBe(404);
     expect(await response.text()).toContain("noindex");
   }
   const html = await (await request.get("/san-pham")).text();

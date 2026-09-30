@@ -5,61 +5,55 @@ import Link from "next/link";
 import Image from "next/image";
 import { ImageOff, Search, ArrowRight } from "lucide-react";
 import type { Category, CatalogProduct } from "@/lib/catalog";
-function brandLabel(value: string) {
-  return value.normalize("NFC").replace(/[\u200B-\u200D\uFEFF]/g, "").trim().replace(/\s+/g, " ");
-}
-function brandKey(value: string) {
-  return brandLabel(value).toLocaleLowerCase("vi");
-}
+import {
+  brandLabel,
+  brandKey,
+  filterProducts,
+  catalogHref,
+  pageSize,
+} from "@/lib/catalog-query";
+import { canOptimizeImage } from "@/lib/image-policy";
 export function Catalog({
   products,
   categories,
   selected = "",
   initialQuery = "",
+  initialBrand = "",
+  initialSort = "new",
+  initialPage = 1,
 }: {
   products: CatalogProduct[];
   categories: Category[];
   selected?: string;
   initialQuery?: string;
+  initialBrand?: string;
+  initialSort?: string;
+  initialPage?: number;
 }) {
   const router = useRouter();
   const [query, setQuery] = useState(initialQuery);
-  const [brand, setBrand] = useState("");
-  const [sort, setSort] = useState("new");
-  const [page, setPage] = useState(1);
-  const brands = useMemo(
-    () => {
-      const unique = new Map<string, string>();
-      for (const product of products) {
-        const label = brandLabel(product.brand);
-        const key = brandKey(label);
-        if (key && !unique.has(key)) unique.set(key, label);
-      }
-      return [...unique.entries()].sort((a, b) => a[1].localeCompare(b[1], "vi"));
-    },
-    [products],
-  );
-  const filtered = products
-    .filter(
-      (p) =>
-        (!brand || brandKey(p.brand) === brand) &&
-        `${p.name} ${p.sku} ${p.model}`
-          .toLocaleLowerCase("vi")
-          .includes(query.toLocaleLowerCase("vi")),
-    )
-    .sort((a, b) =>
-      sort === "name"
-        ? a.name.localeCompare(b.name, "vi")
-        : b.created_at.localeCompare(a.created_at),
-    );
+  const [brand, setBrand] = useState(initialBrand);
+  const [sort, setSort] = useState(initialSort);
+  const [page, setPage] = useState(initialPage);
+  const path = selected ? `/danh-muc/${selected}` : "/san-pham";
+  const brands = useMemo(() => {
+    const unique = new Map<string, string>();
+    for (const product of products) {
+      const label = brandLabel(product.brand);
+      const key = brandKey(label);
+      if (key && !unique.has(key)) unique.set(key, label);
+    }
+    return [...unique.entries()].sort((a, b) => a[1].localeCompare(b[1], "vi"));
+  }, [products]);
+  const filtered = filterProducts(products, query, brand, sort);
   const currentPage = Math.min(
     page,
-    Math.max(1, Math.ceil(filtered.length / 6)),
+    Math.max(1, Math.ceil(filtered.length / pageSize)),
   );
   return (
     <div className="catalog-layout">
       <aside className="filters">
-        <h3>Bộ lọc sản phẩm</h3>
+        <h2>Bộ lọc sản phẩm</h2>
         <label>
           Danh mục
           <select
@@ -90,7 +84,9 @@ export function Catalog({
             >
               <option value="">Tất cả thương hiệu</option>
               {brands.map(([key, label]) => (
-                <option key={key} value={key}>{label}</option>
+                <option key={key} value={key}>
+                  {label}
+                </option>
               ))}
             </select>
           </label>
@@ -141,9 +137,11 @@ export function Catalog({
         <p className="result-count">{filtered.length} sản phẩm</p>
         {filtered.length ? (
           <div className="product-grid catalog-products">
-            {filtered.slice((currentPage - 1) * 6, currentPage * 6).map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
+            {filtered
+              .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+              .map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
           </div>
         ) : (
           <div className="empty-state">
@@ -152,19 +150,24 @@ export function Catalog({
             <p>Thử từ khóa khác hoặc liên hệ để được tư vấn.</p>
           </div>
         )}
-        <div className="pagination">
-          {Array.from({ length: Math.ceil(filtered.length / 6) }, (_, i) => (
-            <button
-              key={i}
-              className={currentPage === i + 1 ? "active" : ""}
-              aria-current={currentPage === i + 1 ? "page" : undefined}
-              aria-label={`Trang ${i + 1}`}
-              onClick={() => setPage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
+        <nav className="pagination" aria-label="Phân trang sản phẩm">
+          {Array.from(
+            { length: Math.ceil(filtered.length / pageSize) },
+            (_, i) => (
+              <Link
+                key={i}
+                href={catalogHref(path, i + 1, query, brand, sort)}
+                prefetch={false}
+                onClick={() => setPage(i + 1)}
+                className={currentPage === i + 1 ? "active" : ""}
+                aria-current={currentPage === i + 1 ? "page" : undefined}
+                aria-label={`Trang ${i + 1}`}
+              >
+                {i + 1}
+              </Link>
+            ),
+          )}
+        </nav>
       </div>
     </div>
   );
@@ -180,8 +183,8 @@ function ProductCard({ product: p }: { product: CatalogProduct }) {
             src={image}
             alt={p.name}
             fill
-            unoptimized
-            sizes="(max-width:640px) 100vw, 33vw"
+            unoptimized={!canOptimizeImage(image)}
+            sizes="(max-width:640px) 100vw, (max-width:1000px) 50vw, 33vw"
             style={{ objectFit: "contain" }}
             onError={() => setFailed(true)}
           />
@@ -193,13 +196,23 @@ function ProductCard({ product: p }: { product: CatalogProduct }) {
         )}
       </Link>
       <div className="product-info">
-        <span className="product-category" title={p.category}>{p.category}</span>
+        <span className="product-category" title={p.category}>
+          {p.category}
+        </span>
         <Link href={`/san-pham/${p.slug}`}>
           <h3 title={p.name}>{p.name}</h3>
         </Link>
         <div className="product-code">
-          <div><span>SKU</span><span title={p.sku}>{p.sku}</span></div>
-          {p.model && <div><span>Model</span><span title={p.model}>{p.model}</span></div>}
+          <div>
+            <span>SKU</span>
+            <span title={p.sku}>{p.sku}</span>
+          </div>
+          {p.model && (
+            <div>
+              <span>Model</span>
+              <span title={p.model}>{p.model}</span>
+            </div>
+          )}
         </div>
         <div className="product-price">
           <Link

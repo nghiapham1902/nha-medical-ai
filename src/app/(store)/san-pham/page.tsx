@@ -1,32 +1,21 @@
 import { Catalog } from "@/components/catalog";
 import { CategoryTiles } from "@/components/category-tiles";
-import { repository } from "@/lib/repository";
-import { notFound, redirect } from "next/navigation";
-export const dynamic = "force-dynamic";
+import { loadCatalogPage } from "@/lib/catalog-page";
+import { catalogHref, type CatalogSearchParams } from "@/lib/catalog-query";
 import { PageHeading } from "@/components/page-heading";
 import { seo } from "@/lib/seo";
-export const metadata = seo(
-  "Danh mục sản phẩm",
-  "Khám phá thiết bị phòng thí nghiệm, vật tư y tế, dụng cụ xét nghiệm, hóa chất và bảo hộ.",
-  "/san-pham",
-);
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string; q?: string }>;
-}) {
-  const query = await searchParams;
-  const [categories, products] = await Promise.all([
-    repository.getCategories(),
-    query.category ? Promise.resolve([]) : repository.getProducts(),
-  ]);
-  if (query.category) {
-    const category = categories.find(
-      (c) => c.slug === query.category || c.name === query.category,
-    );
-    if (!category) notFound();
-    redirect(`/danh-muc/${category.slug}`);
-  }
+type Props = { searchParams: Promise<CatalogSearchParams> };
+export async function generateMetadata({ searchParams }: Props) {
+  const { state } = await loadCatalogPage(searchParams);
+  return seo(
+    `Thiết bị y tế, phòng thí nghiệm & vật tư${state.page > 1 ? ` – Trang ${state.page}` : ""}`,
+    "Tham khảo danh mục thiết bị y tế, thiết bị phòng thí nghiệm và vật tư tại NHA Medical. Tìm sản phẩm theo tên, model, hãng và nhu cầu sử dụng.",
+    catalogHref("/san-pham", state.filtered ? 1 : state.page),
+    { noindex: state.filtered },
+  );
+}
+export default async function Page({ searchParams }: Props) {
+  const { categories, products, state } = await loadCatalogPage(searchParams);
   return (
     <>
       <PageHeading
@@ -39,9 +28,13 @@ export default async function Page({
           <CategoryTiles categories={categories} />
         </div>
         <Catalog
+          key={JSON.stringify(state)}
           products={products}
           categories={categories}
-          initialQuery={typeof query.q === "string" ? query.q : ""}
+          initialQuery={state.query}
+          initialBrand={state.brand}
+          initialSort={state.sort}
+          initialPage={state.page}
         />
       </section>
     </>
